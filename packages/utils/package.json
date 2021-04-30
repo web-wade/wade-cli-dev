@@ -1,6 +1,6 @@
 {
   "name": "@wade-cli-dev/utils",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "wade-cli-dev utils",
   "author": "wade <756059388@qq.com>",
   "homepage": "",
@@ -15,5 +15,6 @@
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
-  }
+  },
+  "gitHead": "b2ea5a8eb84bbf0213c5336f51e5a99a3d1a615b"
 }
