@@ -1,0 +1,30 @@
+{
+  "name": "@wade-cli-dev/core",
+  "version": "0.0.4",
+  "description": "wade-cli-dev core ",
+  "author": "wade <756059388@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "bin": {
+    "wade-cli-dev": "bin/index.js"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@wade-cli-dev/utils": "file:../../utils/utils",
+    "import-local": "^3.0.2",
+    "npmlog": "^4.1.2"
+  },
+  "gitHead": "6b52bef4b500f0ee157389c88103265d3439e372",
+  "publishConfig": {
+    "access": "public"
+  }
+}
