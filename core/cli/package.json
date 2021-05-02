@@ -19,9 +19,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@wade-cli-dev/utils": "file:../../utils/utils",
+    "@wade-cli-dev/log": "file:../../utils/log",
+    "colors": "^1.4.0",
     "import-local": "^3.0.2",
-    "npmlog": "^4.1.2"
+    "npmlog": "^4.1.2",
+    "semver": "^7.3.5"
   },
   "gitHead": "6b52bef4b500f0ee157389c88103265d3439e372",
   "publishConfig": {
