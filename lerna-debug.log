@@ -1,0 +1,12 @@
+0 silly argv {
+0 silly argv   _: [ 'create' ],
+0 silly argv   lernaVersion: '4.0.0',
+0 silly argv   '$0': 'lerna',
+0 silly argv   name: '@wade-cli-dev/',
+0 silly argv   loc: 'get-npm-info'
+0 silly argv }
+1 notice cli v4.0.0
+2 verbose rootPath /Users/wade/Documents/Code/Running/cli-dev
+3 error TypeError: Cannot read property 'toLocaleLowerCase' of undefined
+3 error     at camelCase (/Users/wade/Documents/Code/Running/cli-dev/node_modules/yargs-parser/build/index.cjs:8:15)
+3 error     at CreateCommand.initialize (/Users/wade/Documents/Code/Running/cli-dev/node_modules/@lerna/create/index.js:63:22)
