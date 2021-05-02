@@ -13,7 +13,6 @@ const log = require("@wade-cli-dev/log")
 const constant = require("./const")
 
 let args
-let config
 
 function core() {
   try {
@@ -29,11 +28,12 @@ function core() {
   }
 }
 
-function checkGlobalUpdate(){
- const currentVersion = pkg.version
- const npmName = pkg.name
- const {getNpmInfo} =require("@wade-cli-dev/get-npm-info")
- getNpmInfo(npmName)
+async function checkGlobalUpdate() {
+  const currentVersion = pkg.version
+  const npmName = pkg.name
+  const { getNpmVersions } = require("@wade-cli-dev/get-npm-info")
+  const data = await getNpmVersions(npmName)
+  console.log(data)
 }
 
 function checkEnv() {
@@ -44,7 +44,7 @@ function checkEnv() {
       path: dotenvPath,
     })
   }
-  config = createDefaultConfig()
+  createDefaultConfig()
 }
 
 function createDefaultConfig() {
@@ -53,10 +53,10 @@ function createDefaultConfig() {
   }
   if (process.env.CLI_HOME) {
     cliConfig["cliHome"] = path.join(userHome, process.env.CLI_HOME)
-  }else{
+  } else {
     cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME)
   }
-  process.env.CLI_HOME_PATH = cliConfig.cliHome;
+  process.env.CLI_HOME_PATH = cliConfig.cliHome
 }
 
 function checkInputArgs() {
