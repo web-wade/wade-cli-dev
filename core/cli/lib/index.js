@@ -7,12 +7,16 @@ const path = require("path")
 const colors = require("colors/safe")
 const userHome = require("user-home")
 const pathExists = require("path-exists")
+const commander = require("commander")
 
 const pkg = require("../package.json")
 const log = require("@wade-cli-dev/log")
+const init = require("@wade-cli-dev/init")
 const constant = require("./const")
 
 let args
+
+const program = new commander.Command()
 
 function core() {
   try {
@@ -20,20 +24,63 @@ function core() {
     checkNodeVersion()
     checkRoot()
     checkUserHome()
-    checkInputArgs()
+    // checkInputArgs()
     checkEnv()
     checkGlobalUpdate()
+    registerCommand()
   } catch (error) {
     log.error(error.message)
   }
 }
 
+function registerCommand() {
+  program
+    .name(Object.keys(pkg.bin)[0])
+    .usage("<command> [options]")
+    .version(pkg.version)
+    .option("-d,--debug", "是否开启调试", false)
+
+  program
+    .command("init [projectName]")
+    .option("-f --force", "是否强制初始化项目")
+    .action((projectName, cmdObj) => {
+      init(projectName, cmdObj)
+    })
+
+  program.on("option:debug", function () {
+    if (program.debug) {
+      process.env.LOG_LEVEL = "verbose"
+    } else {
+      process.env.LOG_LEVEL = "info"
+    }
+  })
+  program.on("command:*", function (obj) {
+    const availableCommands = program.commands.map((cmd) => cmd.name)
+    console.log(colors.red("未知命令" + obj[0]))
+    if (availableCommands.length > 0) {
+      console.log(colors.red("可用命令" + availableCommands.join(",")))
+    }
+  })
+
+  log.level = process.env.LOG_LEVEL
+  log.verbose("test")
+
+  program.parse(program.args)
+}
+
 async function checkGlobalUpdate() {
   const currentVersion = pkg.version
   const npmName = pkg.name
-  const { getNpmVersions } = require("@wade-cli-dev/get-npm-info")
-  const data = await getNpmVersions(npmName)
-  console.log(data)
+  const { getNpmSemverVersion } = require("@wade-cli-dev/get-npm-info")
+  const lastVersion = await getNpmSemverVersion(currentVersion, npmName)
+  if (lastVersion && semver.gt(lastVersion, currentVersion)) {
+    log.warn(
+      "更新提醒",
+      colors.yellow(
+        `请手动更新 ${npmName}, 当前的版本是 ${currentVersion}，最新版本：${lastVersion}，执行 npm install -g ${npmName}`
+      )
+    )
+  }
 }
 
 function checkEnv() {
