@@ -7,16 +7,17 @@ const path = require("path")
 const colors = require("colors/safe")
 const userHome = require("user-home")
 const pathExists = require("path-exists")
-const commander = require("commander")
+const { Command } = require('commander');
 
 const pkg = require("../package.json")
 const log = require("@wade-cli-dev/log")
 const init = require("@wade-cli-dev/init")
+const exec = require("@wade-cli-dev/exec")
 const constant = require("./const")
 
 let args
 
-const program = new commander.Command()
+const program = new Command()
 
 function core() {
   try {
@@ -35,37 +36,53 @@ function core() {
 
 function registerCommand() {
   program
-    .name(Object.keys(pkg.bin)[0])
-    .usage("<command> [options]")
+    .name(Object.keys(pkg.bin)[0]) // Usage: imooc-test-berners <command> [options] 实现nanme
+    .usage("<command> [options]") // Usage: imooc-test-berners <command> [options] 实现后面两个参数
     .version(pkg.version)
-    .option("-d,--debug", "是否开启调试", false)
+    .option("-d, --debug", "是否开启调试模式", false)
+    .option("-tp, --targetPath <targetPath>", "是否指定本地调试文件路径", "")
 
   program
     .command("init [projectName]")
-    .option("-f --force", "是否强制初始化项目")
-    .action((projectName, cmdObj) => {
-      init(projectName, cmdObj)
-    })
+    .option("-f, --force", "是否强制初始化项目")
+    .action(exec)
 
-  program.on("option:debug", function () {
-    if (program.debug) {
-      process.env.LOG_LEVEL = "verbose"
+  // 实现debug
+  program.on("option:debug", () => {
+    const options = program.opts()
+    if (options.debug) {
+      process.env.LOG_LEVEL = "verbose" // 修改日志级别
     } else {
       process.env.LOG_LEVEL = "info"
     }
+    log.level = process.env.LOG_LEVEL // 设置日志级别
+    // log.verbose('test');
   })
-  program.on("command:*", function (obj) {
-    const availableCommands = program.commands.map((cmd) => cmd.name)
-    console.log(colors.red("未知命令" + obj[0]))
-    if (availableCommands.length > 0) {
-      console.log(colors.red("可用命令" + availableCommands.join(",")))
+
+  // 监听targetPath属性，在写入环境变量中
+  program.on("option:targetPath", () => {
+    const options = program.opts()
+    if (options.targetPath) {
+      process.env.CLI_TARGET_PATH = options.targetPath
     }
   })
 
-  log.level = process.env.LOG_LEVEL
-  log.verbose("test")
+  program.on("command:*", (obj) => {
+    if (Array.isArray(obj) && obj.length > 0) {
+      console.log(colors.red(`未知的命令：${obj.join(",")}`))
+      const availableCommands = program.commands.map((cmd) => cmd.name())
+      if (availableCommands.length > 0) {
+        console.log(colors.red(`可用的命令：${availableCommands.join(",")}`))
+      }
+    }
+  })
 
-  program.parse(program.args)
+  if (process.argv.length < 3) {
+    program.outputHelp()
+  }
+
+  // 这句话要写在结尾， 解析参数
+  program.parse(process.argv)
 }
 
 async function checkGlobalUpdate() {

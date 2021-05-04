@@ -19,6 +19,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@wade-cli-dev/exec": "file:../exec",
     "@wade-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@wade-cli-dev/init": "file:../../commands/init",
     "@wade-cli-dev/log": "file:../../utils/log",
