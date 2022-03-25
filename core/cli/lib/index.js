@@ -30,6 +30,7 @@ function core() {
     checkGlobalUpdate()
     registerCommand()
   } catch (error) {
+    console.log(error)
     log.error(error.message)
   }
 }

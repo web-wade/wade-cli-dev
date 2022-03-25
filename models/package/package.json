@@ -27,7 +27,12 @@
     "url": "https://github.com/web-wade/wade-cli-dev/issues"
   },
   "dependencies": {
+    "@wade-cli-dev/format-path": "file:../../utils/format-path",
+    "@wade-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
     "@wade-cli-dev/utils": "file:../../utils/utils",
+    "fs-extra": "^7.0.1",
+    "npminstall": "^4.11.0",
+    "path-exists": "^4.0.0",
     "pkg-dir": "^5.0.0"
   }
 }
